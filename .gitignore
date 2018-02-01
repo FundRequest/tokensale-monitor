@@ -1,0 +1,10 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea
+.gradle
+*.iml
+build/
+out/
+
+
+application-*.properties
+docker/docker_data
