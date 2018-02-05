@@ -1,7 +1,7 @@
 FROM frolvlad/alpine-oraclejdk8:slim
 
 VOLUME /tmp
-ADD build/libs/tokensale-0.0.1-SNAPSHOT.jar tokensale-monitor.jar
+ADD build/libs/tokensale-monitor-0.0.1-SNAPSHOT.jar tokensale-monitor.jar
 RUN sh -c 'touch /tokensale-monitor.jar' && \
     mkdir config
 
