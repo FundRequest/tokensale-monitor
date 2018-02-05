@@ -38,10 +38,10 @@ public class ProgressServiceImpl implements ProgressService {
             json.put("timestamp", toLocalDateTime(paidEvent.getTimestamp()));
             json.put("transaction_hash", paidEvent.getTransactionHash());
             if (StringUtils.isNotBlank(paidEvent.getTokenAmount())) {
-                json.put("token_amount", new BigDecimal(paidEvent.getTokenAmount()));
+                json.put("token_amount", new BigDecimal(paidEvent.getTokenAmount()).doubleValue());
             }
             if (StringUtils.isNotBlank(paidEvent.getWeiAmount())) {
-                json.put("wei_amount", new BigDecimal(paidEvent.getWeiAmount()));
+                json.put("wei_amount", new BigDecimal(paidEvent.getWeiAmount()).doubleValue());
             }
             json.put("personal_cap_active", paidEvent.getPersonalCapActive());
             IndexRequestBuilder requestBuilder = transportClient.prepareIndex("paid", "paid", paidEvent.getTransactionHash()).setSource(json);
@@ -61,7 +61,7 @@ public class ProgressServiceImpl implements ProgressService {
             json.put("timestamp", toLocalDateTime(transferEvent.getTimestamp()));
             json.put("transaction_hash", transferEvent.getTransactionHash());
             if (StringUtils.isNotBlank(transferEvent.getAmount())) {
-                json.put("amount", new BigDecimal(transferEvent.getAmount()));
+                json.put("amount", new BigDecimal(transferEvent.getAmount()).doubleValue());
             }
             IndexRequestBuilder requestBuilder = transportClient.prepareIndex("transfer", "transfer", transferEvent.getTransactionHash()).setSource(json);
             requestBuilder.get();
