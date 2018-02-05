@@ -45,7 +45,7 @@ public class ProgressServiceImpl implements ProgressService {
             }
             if (StringUtils.isNotBlank(paidEvent.getWeiAmount())) {
                 json.put("wei_amount", new BigDecimal(paidEvent.getWeiAmount()).doubleValue());
-                json.put("eth_amount", toEther(paidEvent.getTokenAmount()).doubleValue());
+                json.put("eth_amount", toEther(paidEvent.getWeiAmount()).doubleValue());
             }
             json.put("personal_cap_active", paidEvent.getPersonalCapActive());
             IndexRequestBuilder requestBuilder = transportClient.prepareIndex("paid", "paid", paidEvent.getTransactionHash()).setSource(json);
