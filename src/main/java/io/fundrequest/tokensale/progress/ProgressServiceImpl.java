@@ -2,6 +2,7 @@ package io.fundrequest.tokensale.progress;
 
 import io.fundrequest.tokensale.progress.dto.PaidEventDto;
 import io.fundrequest.tokensale.progress.dto.TransferEventDto;
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.client.transport.TransportClient;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -33,10 +35,15 @@ public class ProgressServiceImpl implements ProgressService {
         try {
             Map<String, Object> json = new HashMap<>();
             json.put("beneficiary", paidEvent.getBeneficiary());
-            json.put("token_amount", paidEvent.getTokenAmount());
             json.put("timestamp", toLocalDateTime(paidEvent.getTimestamp()));
             json.put("transaction_hash", paidEvent.getTransactionHash());
-            json.put("wei_amount", paidEvent.getWeiAmount());
+            if (StringUtils.isNotBlank(paidEvent.getTokenAmount())) {
+                json.put("token_amount", new BigDecimal(paidEvent.getTokenAmount()));
+            }
+            if (StringUtils.isNotBlank(paidEvent.getWeiAmount())) {
+                json.put("wei_amount", new BigDecimal(paidEvent.getWeiAmount()));
+            }
+            json.put("personal_cap_active", paidEvent.getPersonalCapActive());
             IndexRequestBuilder requestBuilder = transportClient.prepareIndex("paid", "paid", paidEvent.getTransactionHash()).setSource(json);
             requestBuilder.get();
 
@@ -53,7 +60,9 @@ public class ProgressServiceImpl implements ProgressService {
             json.put("to", transferEvent.getTo());
             json.put("timestamp", toLocalDateTime(transferEvent.getTimestamp()));
             json.put("transaction_hash", transferEvent.getTransactionHash());
-            json.put("amount", transferEvent.getAmount());
+            if (StringUtils.isNotBlank(transferEvent.getAmount())) {
+                json.put("amount", new BigDecimal(transferEvent.getAmount()));
+            }
             IndexRequestBuilder requestBuilder = transportClient.prepareIndex("transfer", "transfer", transferEvent.getTransactionHash()).setSource(json);
             requestBuilder.get();
 
