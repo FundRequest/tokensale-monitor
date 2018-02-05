@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import static io.fundrequest.tokensale.notification.participant.ParticipantNotifier.toEther;
+
 @Component
 public class ProgressServiceImpl implements ProgressService {
 
@@ -38,10 +40,12 @@ public class ProgressServiceImpl implements ProgressService {
             json.put("timestamp", toLocalDateTime(paidEvent.getTimestamp()));
             json.put("transaction_hash", paidEvent.getTransactionHash());
             if (StringUtils.isNotBlank(paidEvent.getTokenAmount())) {
-                json.put("token_amount", new BigDecimal(paidEvent.getTokenAmount()).doubleValue());
+                json.put("token_wei_amount", new BigDecimal(paidEvent.getTokenAmount()).doubleValue());
+                json.put("token_eth_amount", toEther(paidEvent.getTokenAmount()).doubleValue());
             }
             if (StringUtils.isNotBlank(paidEvent.getWeiAmount())) {
                 json.put("wei_amount", new BigDecimal(paidEvent.getWeiAmount()).doubleValue());
+                json.put("eth_amount", toEther(paidEvent.getTokenAmount()).doubleValue());
             }
             json.put("personal_cap_active", paidEvent.getPersonalCapActive());
             IndexRequestBuilder requestBuilder = transportClient.prepareIndex("paid", "paid", paidEvent.getTransactionHash()).setSource(json);

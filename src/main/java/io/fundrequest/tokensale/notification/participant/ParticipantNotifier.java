@@ -55,7 +55,7 @@ public class ParticipantNotifier {
 
     }
 
-    private BigDecimal toEther(String amount) {
+    public static BigDecimal toEther(String amount) {
         return new BigDecimal(amount).divide(BigDecimal.TEN.pow(18).setScale(2, RoundingMode.HALF_UP), RoundingMode.HALF_UP);
     }
 
