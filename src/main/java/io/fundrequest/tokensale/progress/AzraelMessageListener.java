@@ -13,19 +13,25 @@ public class AzraelMessageListener {
 
     private ObjectMapper objectMapper;
     private ApplicationEventPublisher eventPublisher;
+    private ProgressService progressService;
 
-    public AzraelMessageListener(ObjectMapper objectMapper, ApplicationEventPublisher eventPublisher) {
+    public AzraelMessageListener(ObjectMapper objectMapper, ApplicationEventPublisher eventPublisher, ProgressService progressService) {
         this.objectMapper = objectMapper;
         this.eventPublisher = eventPublisher;
+        this.progressService = progressService;
     }
 
     public void receivePaidMessage(String message) throws IOException {
         PaidEventDto result = objectMapper.readValue(message, PaidEventDto.class);
-        eventPublisher.publishEvent(result);
+        if (!progressService.transactionIsAlreadyProcessed(result)) {
+            eventPublisher.publishEvent(result);
+        }
     }
 
     public void receiveTransferMessage(String message) throws IOException {
         TransferEventDto result = objectMapper.readValue(message, TransferEventDto.class);
-        eventPublisher.publishEvent(result);
+        if (!progressService.transactionIsAlreadyProcessed(result)) {
+            eventPublisher.publishEvent(result);
+        }
     }
 }

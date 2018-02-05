@@ -67,9 +67,9 @@ public class RegistrationServiceImpl implements RegistrationService {
     private Participant createParticipant(List<Object> row) {
         Participant p = new Participant();
         p.setAddress(getRowValue(row, 5));
-        p.setEmail(getRowValue(row, 0));
-        p.setFirstName(getRowValue(row, 1));
-        p.setLastName(getRowValue(row, 2));
+        p.setEmail(getRowValue(row, 2));
+        p.setFirstName(getRowValue(row, 0));
+        p.setLastName(getRowValue(row, 1));
         return p;
     }
 

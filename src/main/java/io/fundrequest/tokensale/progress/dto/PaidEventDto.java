@@ -7,6 +7,7 @@ public class PaidEventDto {
     private String weiAmount;
     private String tokenAmount;
     private Long timestamp;
+    private Boolean personalCapActive;
 
     public String getTransactionHash() {
         return transactionHash;
@@ -46,5 +47,13 @@ public class PaidEventDto {
 
     public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public Boolean getPersonalCapActive() {
+        return personalCapActive;
+    }
+
+    public void setPersonalCapActive(Boolean personalCapActive) {
+        this.personalCapActive = personalCapActive;
     }
 }

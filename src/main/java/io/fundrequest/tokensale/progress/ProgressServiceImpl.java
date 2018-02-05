@@ -2,8 +2,11 @@ package io.fundrequest.tokensale.progress;
 
 import io.fundrequest.tokensale.progress.dto.PaidEventDto;
 import io.fundrequest.tokensale.progress.dto.TransferEventDto;
+import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.client.transport.TransportClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -12,11 +15,14 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 @Component
 public class ProgressServiceImpl implements ProgressService {
 
     private TransportClient transportClient;
+
+    private static final Logger logger = LoggerFactory.getLogger(ProgressService.class);
 
     public ProgressServiceImpl(TransportClient transportClient) {
         this.transportClient = transportClient;
@@ -31,11 +37,11 @@ public class ProgressServiceImpl implements ProgressService {
             json.put("timestamp", toLocalDateTime(paidEvent.getTimestamp()));
             json.put("transaction_hash", paidEvent.getTransactionHash());
             json.put("wei_amount", paidEvent.getWeiAmount());
-            IndexRequestBuilder requestBuilder = transportClient.prepareIndex("fr-token-sale", "paid", paidEvent.getTransactionHash()).setSource(json);
+            IndexRequestBuilder requestBuilder = transportClient.prepareIndex("paid", "paid", paidEvent.getTransactionHash()).setSource(json);
             requestBuilder.get();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("error when updating es", e);
         }
     }
 
@@ -48,11 +54,31 @@ public class ProgressServiceImpl implements ProgressService {
             json.put("timestamp", toLocalDateTime(transferEvent.getTimestamp()));
             json.put("transaction_hash", transferEvent.getTransactionHash());
             json.put("amount", transferEvent.getAmount());
-            IndexRequestBuilder requestBuilder = transportClient.prepareIndex("fr-token-sale", "transfer", transferEvent.getTransactionHash()).setSource(json);
+            IndexRequestBuilder requestBuilder = transportClient.prepareIndex("transfer", "transfer", transferEvent.getTransactionHash()).setSource(json);
             requestBuilder.get();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("error when updating es", e);
+        }
+    }
+
+    @Override
+    public boolean transactionIsAlreadyProcessed(PaidEventDto paidEvent) {
+        try {
+            return transportClient.get(new GetRequest("paid", "paid", paidEvent.getTransactionHash())).get().isExists();
+        } catch (InterruptedException | ExecutionException e) {
+            logger.error("error when contacting es", e);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean transactionIsAlreadyProcessed(TransferEventDto transferEvent) {
+        try {
+            return transportClient.get(new GetRequest("transfer", "transfer", transferEvent.getTransactionHash())).get().isExists();
+        } catch (InterruptedException | ExecutionException e) {
+            logger.error("error when contacting es", e);
+            return false;
         }
     }
 

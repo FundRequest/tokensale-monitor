@@ -10,7 +10,9 @@ import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
 public class JmsConfig {
     @Bean
     SimpleMessageListenerContainer paidContainer(ConnectionFactory connectionFactory,
@@ -56,8 +58,8 @@ public class JmsConfig {
     }
 
     @Bean
-    Binding fundBinding(Queue fundQueue, TopicExchange exchange, @Value("${io.fundrequest.azrael.queue.paid}") final String queueName) {
-        return BindingBuilder.bind(fundQueue).to(exchange).with(queueName);
+    Binding paidBinding(Queue paidQueue, TopicExchange exchange, @Value("${io.fundrequest.azrael.queue.paid}") final String queueName) {
+        return BindingBuilder.bind(paidQueue).to(exchange).with(queueName);
     }
 
     @Bean

@@ -42,6 +42,12 @@ public class AddSubscriberCommand {
         mergeFields.setTokenAmount(tokenAmount);
     }
 
+    public void setEtherAmount(BigDecimal etherAmount) {
+        mergeFields.setEtherAmount(etherAmount);
+    }
+
+
+
     public void setAddress(String address) {
         mergeFields.setAddress(address);
     }

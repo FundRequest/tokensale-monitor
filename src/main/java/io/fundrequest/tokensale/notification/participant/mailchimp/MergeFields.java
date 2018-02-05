@@ -11,9 +11,11 @@ class MergeFields {
     private String lastName;
     @JsonProperty("TAMOUNT")
     private BigDecimal tokenAmount;
-    @JsonProperty("ADDRESS")
+    @JsonProperty("EAMOUNT")
+    private BigDecimal etherAmount;
+    @JsonProperty("ETHADDRESS")
     private String address;
-    @JsonProperty("TRANSACTION_ID")
+    @JsonProperty("TRANSID")
     private String transactionId;
 
     public String getFirstName() {
@@ -42,6 +44,14 @@ class MergeFields {
 
     public String getAddress() {
         return address;
+    }
+
+    public BigDecimal getEtherAmount() {
+        return etherAmount;
+    }
+
+    public void setEtherAmount(BigDecimal etherAmount) {
+        this.etherAmount = etherAmount;
     }
 
     public void setAddress(String address) {
