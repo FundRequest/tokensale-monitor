@@ -39,8 +39,8 @@ public class ParticipantNotifier {
             BigDecimal etherAmount = toEther(event.getWeiAmount());
             command.setAddress(event.getBeneficiary());
             command.setTransactionId(event.getTransactionHash());
-            command.setTokenAmount(tokenAmount);
-            command.setEtherAmount(etherAmount);
+            command.setTokenAmount(tokenAmount.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString());
+            command.setEtherAmount(etherAmount.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString());
             command.setEmail(participant.getEmail());
             command.setLastName(participant.getLastName());
             command.setFirstName(participant.getFirstName());
