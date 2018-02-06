@@ -42,7 +42,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     public void load() {
         try {
             this.participantsByAddress = importFromSheets();
-            LOGGER.info("Imported new data");
+            LOGGER.info("Imported new data: " + this.participantsByAddress.size());
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             throw new RuntimeException("unable to load");
