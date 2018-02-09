@@ -39,6 +39,7 @@ public class ProgressServiceImpl implements ProgressService {
             json.put("beneficiary", paidEvent.getBeneficiary());
             json.put("timestamp", toLocalDateTime(paidEvent.getTimestamp()));
             json.put("transaction_hash", paidEvent.getTransactionHash());
+            json.put("log_index", paidEvent.getLogIndex());
             if (StringUtils.isNotBlank(paidEvent.getTokenAmount())) {
                 json.put("token_wei_amount", new BigDecimal(paidEvent.getTokenAmount()).doubleValue());
                 json.put("token_eth_amount", toEther(paidEvent.getTokenAmount()).doubleValue());
@@ -68,6 +69,7 @@ public class ProgressServiceImpl implements ProgressService {
             json.put("to", transferEvent.getTo());
             json.put("timestamp", toLocalDateTime(transferEvent.getTimestamp()));
             json.put("transaction_hash", transferEvent.getTransactionHash());
+            json.put("log_index", transferEvent.getLogIndex());
             if (StringUtils.isNotBlank(transferEvent.getAmount())) {
                 json.put("token_wei_amount", new BigDecimal(transferEvent.getAmount()).doubleValue());
                 json.put("token_eth_amount", toEther(transferEvent.getAmount()).doubleValue());
