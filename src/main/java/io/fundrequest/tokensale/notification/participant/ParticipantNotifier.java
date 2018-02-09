@@ -39,8 +39,8 @@ public class ParticipantNotifier {
             BigDecimal etherAmount = toEther(event.getWeiAmount());
             command.setAddress(event.getBeneficiary());
             command.setTransactionId(event.getTransactionHash());
-            command.setTokenAmount(tokenAmount.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString());
-            command.setEtherAmount(etherAmount.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString());
+            command.setTokenAmount(tokenAmount.toPlainString());
+            command.setEtherAmount(etherAmount.toPlainString());
             command.setEmail(participant.getEmail());
             command.setLastName(participant.getLastName());
             command.setFirstName(participant.getFirstName());
@@ -56,7 +56,7 @@ public class ParticipantNotifier {
     }
 
     public static BigDecimal toEther(String amount) {
-        return new BigDecimal(amount).divide(BigDecimal.TEN.pow(18).setScale(2, RoundingMode.HALF_UP), RoundingMode.HALF_UP);
+        return new BigDecimal(amount).setScale(18, RoundingMode.HALF_UP).divide(BigDecimal.TEN.pow(18).setScale(2, RoundingMode.HALF_UP), RoundingMode.HALF_UP);
     }
 
 }
