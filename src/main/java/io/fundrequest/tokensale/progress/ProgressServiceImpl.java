@@ -65,7 +65,8 @@ public class ProgressServiceImpl implements ProgressService {
             json.put("timestamp", toLocalDateTime(transferEvent.getTimestamp()));
             json.put("transaction_hash", transferEvent.getTransactionHash());
             if (StringUtils.isNotBlank(transferEvent.getAmount())) {
-                json.put("amount", new BigDecimal(transferEvent.getAmount()).doubleValue());
+                json.put("token_wei_amount", new BigDecimal(transferEvent.getAmount()).doubleValue());
+                json.put("token_eth_amount", toEther(transferEvent.getAmount()).doubleValue());
             }
             IndexRequestBuilder requestBuilder = transportClient.prepareIndex("transfer", "transfer", transferEvent.getTransactionHash()).setSource(json);
             requestBuilder.get();
