@@ -48,12 +48,16 @@ public class ProgressServiceImpl implements ProgressService {
                 json.put("eth_amount", toEther(paidEvent.getWeiAmount()).doubleValue());
             }
             json.put("personal_cap_active", paidEvent.getPersonalCapActive());
-            IndexRequestBuilder requestBuilder = transportClient.prepareIndex("paid", "paid", paidEvent.getTransactionHash()).setSource(json);
+            IndexRequestBuilder requestBuilder = transportClient.prepareIndex("paid", "paid", "" + createEsKey(paidEvent)).setSource(json);
             requestBuilder.get();
 
         } catch (Exception e) {
             logger.error("error when updating es", e);
         }
+    }
+
+    private int createEsKey(PaidEventDto paidEvent) {
+        return paidEvent.hashCode();
     }
 
     @EventListener
@@ -68,7 +72,7 @@ public class ProgressServiceImpl implements ProgressService {
                 json.put("token_wei_amount", new BigDecimal(transferEvent.getAmount()).doubleValue());
                 json.put("token_eth_amount", toEther(transferEvent.getAmount()).doubleValue());
             }
-            IndexRequestBuilder requestBuilder = transportClient.prepareIndex("transfer", "transfer", transferEvent.getTransactionHash()).setSource(json);
+            IndexRequestBuilder requestBuilder = transportClient.prepareIndex("transfer", "transfer", "" + createEsKey(transferEvent)).setSource(json);
             requestBuilder.get();
 
         } catch (Exception e) {
@@ -76,10 +80,14 @@ public class ProgressServiceImpl implements ProgressService {
         }
     }
 
+    private int createEsKey(TransferEventDto transferEvent) {
+        return transferEvent.hashCode();
+    }
+
     @Override
     public boolean transactionIsAlreadyProcessed(PaidEventDto paidEvent) {
         try {
-            return transportClient.get(new GetRequest("paid", "paid", paidEvent.getTransactionHash())).get().isExists();
+            return transportClient.get(new GetRequest("paid", "paid", "" + createEsKey(paidEvent))).get().isExists();
         } catch (InterruptedException | ExecutionException e) {
             logger.error("error when contacting es", e);
             return false;
@@ -89,7 +97,7 @@ public class ProgressServiceImpl implements ProgressService {
     @Override
     public boolean transactionIsAlreadyProcessed(TransferEventDto transferEvent) {
         try {
-            return transportClient.get(new GetRequest("transfer", "transfer", transferEvent.getTransactionHash())).get().isExists();
+            return transportClient.get(new GetRequest("transfer", "transfer", "" + createEsKey(transferEvent))).get().isExists();
         } catch (InterruptedException | ExecutionException e) {
             logger.error("error when contacting es", e);
             return false;
