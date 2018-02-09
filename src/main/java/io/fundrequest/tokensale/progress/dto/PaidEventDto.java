@@ -1,10 +1,9 @@
 package io.fundrequest.tokensale.progress.dto;
 
-import java.util.Objects;
-
 public class PaidEventDto {
 
     private String transactionHash;
+    private String logIndex;
     private String beneficiary;
     private String weiAmount;
     private String tokenAmount;
@@ -17,6 +16,14 @@ public class PaidEventDto {
 
     public void setTransactionHash(String transactionHash) {
         this.transactionHash = transactionHash;
+    }
+
+    public String getLogIndex() {
+        return logIndex;
+    }
+
+    public void setLogIndex(String logIndex) {
+        this.logIndex = logIndex;
     }
 
     public String getBeneficiary() {
@@ -59,22 +66,4 @@ public class PaidEventDto {
         this.personalCapActive = personalCapActive;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PaidEventDto that = (PaidEventDto) o;
-        return Objects.equals(transactionHash, that.transactionHash) &&
-                Objects.equals(beneficiary, that.beneficiary) &&
-                Objects.equals(weiAmount, that.weiAmount) &&
-                Objects.equals(tokenAmount, that.tokenAmount) &&
-                Objects.equals(timestamp, that.timestamp) &&
-                Objects.equals(personalCapActive, that.personalCapActive);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(transactionHash, beneficiary, weiAmount, tokenAmount, timestamp, personalCapActive);
-    }
 }

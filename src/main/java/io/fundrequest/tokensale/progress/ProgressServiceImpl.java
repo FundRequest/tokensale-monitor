@@ -48,7 +48,7 @@ public class ProgressServiceImpl implements ProgressService {
                 json.put("eth_amount", toEther(paidEvent.getWeiAmount()).doubleValue());
             }
             json.put("personal_cap_active", paidEvent.getPersonalCapActive());
-            IndexRequestBuilder requestBuilder = transportClient.prepareIndex("paid", "paid", "" + createEsKey(paidEvent)).setSource(json);
+            IndexRequestBuilder requestBuilder = transportClient.prepareIndex("paid", "paid", createEsKey(paidEvent)).setSource(json);
             requestBuilder.get();
 
         } catch (Exception e) {
@@ -56,8 +56,8 @@ public class ProgressServiceImpl implements ProgressService {
         }
     }
 
-    private int createEsKey(PaidEventDto paidEvent) {
-        return paidEvent.hashCode();
+    private String createEsKey(PaidEventDto paidEvent) {
+        return paidEvent.getTransactionHash() + "_" + paidEvent.getLogIndex();
     }
 
     @EventListener
@@ -72,7 +72,7 @@ public class ProgressServiceImpl implements ProgressService {
                 json.put("token_wei_amount", new BigDecimal(transferEvent.getAmount()).doubleValue());
                 json.put("token_eth_amount", toEther(transferEvent.getAmount()).doubleValue());
             }
-            IndexRequestBuilder requestBuilder = transportClient.prepareIndex("transfer", "transfer", "" + createEsKey(transferEvent)).setSource(json);
+            IndexRequestBuilder requestBuilder = transportClient.prepareIndex("transfer", "transfer", createEsKey(transferEvent)).setSource(json);
             requestBuilder.get();
 
         } catch (Exception e) {
@@ -80,8 +80,8 @@ public class ProgressServiceImpl implements ProgressService {
         }
     }
 
-    private int createEsKey(TransferEventDto transferEvent) {
-        return transferEvent.hashCode();
+    private String createEsKey(TransferEventDto transferEvent) {
+        return transferEvent.getTransactionHash() + "_" + transferEvent.getLogIndex();
     }
 
     @Override

@@ -1,10 +1,9 @@
 package io.fundrequest.tokensale.progress.dto;
 
-import java.util.Objects;
-
 public class TransferEventDto {
 
     private String transactionHash;
+    private String logIndex;
     private String from;
     private String to;
     private String amount;
@@ -16,6 +15,14 @@ public class TransferEventDto {
 
     public void setTransactionHash(String transactionHash) {
         this.transactionHash = transactionHash;
+    }
+
+    public String getLogIndex() {
+        return logIndex;
+    }
+
+    public void setLogIndex(String logIndex) {
+        this.logIndex = logIndex;
     }
 
     public String getFrom() {
@@ -48,23 +55,5 @@ public class TransferEventDto {
 
     public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TransferEventDto that = (TransferEventDto) o;
-        return Objects.equals(transactionHash, that.transactionHash) &&
-                Objects.equals(from, that.from) &&
-                Objects.equals(to, that.to) &&
-                Objects.equals(amount, that.amount) &&
-                Objects.equals(timestamp, that.timestamp);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(transactionHash, from, to, amount, timestamp);
     }
 }
