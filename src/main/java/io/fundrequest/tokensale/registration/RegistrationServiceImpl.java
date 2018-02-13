@@ -7,6 +7,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.ValueRange;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,7 +43,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     public void load() {
         try {
             this.participantsByAddress = importFromSheets();
-            LOGGER.info("Imported new data");
+            LOGGER.info("Imported new data: " + this.participantsByAddress.size());
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             throw new RuntimeException("unable to load");
@@ -51,7 +52,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public Optional<Participant> getParticipant(String address) {
-        return Optional.ofNullable(participantsByAddress.get(address));
+        return Optional.ofNullable(participantsByAddress.get(address.toLowerCase()));
     }
 
     private Map<String, Participant> importFromSheets() throws Exception {
@@ -67,10 +68,11 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     private Participant createParticipant(List<Object> row) {
         Participant p = new Participant();
-        p.setAddress(getRowValue(row, 5));
-        p.setEmail(getRowValue(row, 0));
-        p.setFirstName(getRowValue(row, 1));
-        p.setLastName(getRowValue(row, 2));
+        String address = getRowValue(row, 5);
+        p.setAddress(StringUtils.isNotBlank(address) ? address.toLowerCase() : null);
+        p.setEmail(getRowValue(row, 2));
+        p.setFirstName(getRowValue(row, 0));
+        p.setLastName(getRowValue(row, 1));
         return p;
     }
 

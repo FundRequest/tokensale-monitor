@@ -3,6 +3,7 @@ package io.fundrequest.tokensale.progress.dto;
 public class TransferEventDto {
 
     private String transactionHash;
+    private String logIndex;
     private String from;
     private String to;
     private String amount;
@@ -14,6 +15,14 @@ public class TransferEventDto {
 
     public void setTransactionHash(String transactionHash) {
         this.transactionHash = transactionHash;
+    }
+
+    public String getLogIndex() {
+        return logIndex;
+    }
+
+    public void setLogIndex(String logIndex) {
+        this.logIndex = logIndex;
     }
 
     public String getFrom() {

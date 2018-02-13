@@ -2,18 +2,18 @@ package io.fundrequest.tokensale.notification.participant.mailchimp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.math.BigDecimal;
-
 class MergeFields {
     @JsonProperty("FNAME")
     private String firstName;
     @JsonProperty("LNAME")
     private String lastName;
     @JsonProperty("TAMOUNT")
-    private BigDecimal tokenAmount;
-    @JsonProperty("ADDRESS")
+    private String tokenAmount;
+    @JsonProperty("EAMOUNT")
+    private String etherAmount;
+    @JsonProperty("ETHADDRESS")
     private String address;
-    @JsonProperty("TRANSACTION_ID")
+    @JsonProperty("TRANSID")
     private String transactionId;
 
     public String getFirstName() {
@@ -32,16 +32,24 @@ class MergeFields {
         this.lastName = lastName;
     }
 
-    public BigDecimal getTokenAmount() {
+    public String getTokenAmount() {
         return tokenAmount;
     }
 
-    public void setTokenAmount(BigDecimal tokenAmount) {
+    public void setTokenAmount(String tokenAmount) {
         this.tokenAmount = tokenAmount;
     }
 
     public String getAddress() {
         return address;
+    }
+
+    public String getEtherAmount() {
+        return etherAmount;
+    }
+
+    public void setEtherAmount(String etherAmount) {
+        this.etherAmount = etherAmount;
     }
 
     public void setAddress(String address) {

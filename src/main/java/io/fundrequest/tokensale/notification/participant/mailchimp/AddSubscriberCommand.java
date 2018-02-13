@@ -2,8 +2,6 @@ package io.fundrequest.tokensale.notification.participant.mailchimp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.math.BigDecimal;
-
 public class AddSubscriberCommand {
 
     @JsonProperty("email_address")
@@ -38,9 +36,15 @@ public class AddSubscriberCommand {
         mergeFields.setLastName(lastName);
     }
 
-    public void setTokenAmount(BigDecimal tokenAmount) {
+    public void setTokenAmount(String tokenAmount) {
         mergeFields.setTokenAmount(tokenAmount);
     }
+
+    public void setEtherAmount(String etherAmount) {
+        mergeFields.setEtherAmount(etherAmount);
+    }
+
+
 
     public void setAddress(String address) {
         mergeFields.setAddress(address);

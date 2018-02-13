@@ -1,9 +1,9 @@
 version: '2'
 services:
-  es_ts_1:
+  es_tsm_1:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.1.1
-    container_name: tses1
-    environment:git rem
+    container_name: estsm
+    environment:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -15,11 +15,31 @@ services:
     volumes:
       - tsesdata1:/usr/share/elasticsearch/data
     ports:
-      - 9200:9200
-      - 9300:9300
+      - 9203:9200
+      - 9303:9300
     networks:
       - esnet
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.1.1
+    environment:
+      SERVER_NAME: kibana.fundrequest.io
+      ELASTICSEARCH_URL: http://estsm:9200
+    networks:
+      - esnet
+    ports:
+      - 5603:5601
 
+  tsm_rabbitmq:
+    image: rabbitmq:3.6.8-management
+    ports :
+      -  "5673:5672"
+      -  "9193:15672"
+    volumes:
+      - ./docker_data/monitor/data:/var/lib/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_PASS=default_pass
+    networks:
+      - esnet
 
 volumes:
   tsesdata1:

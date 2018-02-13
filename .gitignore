@@ -5,6 +5,7 @@
 build/
 out/
 
+docker_data
 
 application-*.properties
 docker/docker_data
