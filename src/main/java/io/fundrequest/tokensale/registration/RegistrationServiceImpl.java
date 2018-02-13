@@ -10,6 +10,7 @@ import com.google.api.services.sheets.v4.model.ValueRange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -37,7 +38,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         this.googleClientSecret = googleClientSecret;
     }
 
-    @PostConstruct
+    @Scheduled(fixedDelay = 10000)
     public void load() {
         try {
             this.participantsByAddress = importFromSheets();
